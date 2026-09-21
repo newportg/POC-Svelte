@@ -3,6 +3,8 @@
 	import type { Map as LeafletMap, Marker } from 'leaflet';
 	import 'leaflet/dist/leaflet.css';
 	import { location } from '$lib/location';
+	import { trips } from '$lib/trip';
+	import { getCountryFlagUrl } from '$lib/countryFlags';
 
 	let mapEl: HTMLDivElement;
 	let map: LeafletMap | null = null;
@@ -29,6 +31,19 @@
 
 		marker = L.marker([start.lat, start.lon]).addTo(map);
 
+		for (const t of $trips) {
+			const flagUrl = getCountryFlagUrl(t.country);
+			const icon = flagUrl
+				? L.icon({ iconUrl: flagUrl, iconSize: [22, 15], iconAnchor: [11, 15], className: 'trip-flag-img' })
+				: L.divIcon({
+						html: `<span class="trip-flag">📍</span>`,
+						className: 'trip-flag-icon',
+						iconSize: [20, 20],
+						iconAnchor: [10, 20]
+					});
+			L.marker([t.lat, t.lon], { icon }).addTo(map);
+		}
+
 		unsubscribe = location.subscribe((loc) => {
 			if (map && marker) {
 				map.setView([loc.lat, loc.lon], 13);
@@ -52,5 +67,17 @@
 		min-height: 120px;
 		border-radius: 8px;
 		pointer-events: none;
+	}
+	:global(.trip-flag-icon) {
+		background: none;
+		border: none;
+	}
+	:global(.trip-flag) {
+		font-size: 1.1rem;
+		line-height: 1;
+	}
+	:global(.trip-flag-img) {
+		border-radius: 2px;
+		box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 	}
 </style>

@@ -6,7 +6,9 @@ export interface DashboardPlugin {
 	name: string;
 	icon: string;
 	/** Small component shown as the dashboard tile. */
-	widget: Component;
+	widget: Component<any>;
 	/** Full page shown when the tile is clicked. */
-	detail: Component;
+	detail: Component<any>;
+	/** Optional props passed to both the widget and detail components (e.g. which trip to show). */
+	props?: Record<string, unknown>;
 }

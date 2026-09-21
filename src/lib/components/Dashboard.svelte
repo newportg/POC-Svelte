@@ -1,17 +1,18 @@
 <script lang="ts">
 	import { plugins } from '$lib/plugins/registry';
+	import { base } from '$app/paths';
 </script>
 
 <div class="dashboard-grid">
-	{#each plugins as plugin (plugin.id)}
+	{#each $plugins as plugin (plugin.id)}
 		{@const Widget = plugin.widget}
-		<a class="dashboard-card" href={`/plugin/${plugin.id}`}>
+		<a class="dashboard-card" href={`${base}/plugin/${plugin.id}`}>
 			<div class="card-header">
 				<span class="card-icon">{plugin.icon}</span>
 				<span class="card-name">{plugin.name}</span>
 			</div>
 			<div class="card-body">
-				<Widget />
+				<Widget {...plugin.props ?? {}} />
 			</div>
 		</a>
 	{/each}

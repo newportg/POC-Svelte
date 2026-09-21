@@ -1,16 +1,17 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { getPlugin } from '$lib/plugins/registry';
+	import { plugins } from '$lib/plugins/registry';
+	import { base } from '$app/paths';
 
-	let plugin = $derived(getPlugin($page.params.id ?? ''));
+	let plugin = $derived($plugins.find((p) => p.id === ($page.params.id ?? '')));
 </script>
 
 <div class="plugin-page">
-	<a class="back-link" href="/">← Back to dashboard</a>
+	<a class="back-link" href={base || '/'}>← Back to dashboard</a>
 
 	{#if plugin}
 		{@const Detail = plugin.detail}
-		<Detail />
+		<Detail {...plugin.props ?? {}} />
 	{:else}
 		<p>Plugin "{$page.params.id}" not found.</p>
 	{/if}

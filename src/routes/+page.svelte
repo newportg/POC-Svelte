@@ -1,11 +1,12 @@
 <script lang="ts">
 	import Dashboard from '$lib/components/Dashboard.svelte';
+	import { base } from '$app/paths';
 </script>
 
 <main>
 	<div class="header-row">
 		<h1>Dashboard</h1>
-		<a class="settings-link" href="/settings">⚙ Settings</a>
+		<a class="settings-link" href={`${base}/settings`}>⚙ Settings</a>
 	</div>
 	<Dashboard />
 </main>

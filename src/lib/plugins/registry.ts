@@ -1,11 +1,15 @@
+import { derived, get } from 'svelte/store';
 import type { DashboardPlugin } from './types';
 import TemperatureWidget from './temperature/Widget.svelte';
 import TemperatureDetail from './temperature/Detail.svelte';
 import MapWidget from './map/Widget.svelte';
 import MapDetail from './map/Detail.svelte';
+import TravelWidget from './travel/Widget.svelte';
+import TravelDetail from './travel/Detail.svelte';
+import { trips } from '$lib/trip';
 
-/** Add new plugins here to have them appear on the dashboard. */
-export const plugins: DashboardPlugin[] = [
+/** Plugins that always appear on the dashboard, one tile each. */
+const staticPlugins: DashboardPlugin[] = [
 	{
 		id: 'temperature',
 		name: 'Local Weather',
@@ -22,6 +26,21 @@ export const plugins: DashboardPlugin[] = [
 	}
 ];
 
+/** Dashboard tiles: static plugins plus one "Ski Trip" tile per configured trip. */
+export const plugins = derived(trips, ($trips): DashboardPlugin[] => [
+	...staticPlugins,
+	...$trips.map(
+		(t): DashboardPlugin => ({
+			id: `trip-${t.id}`,
+			name: `${t.destination} Trip`,
+			icon: '🎿',
+			widget: TravelWidget,
+			detail: TravelDetail,
+			props: { tripId: t.id }
+		})
+	)
+]);
+
 export function getPlugin(id: string): DashboardPlugin | undefined {
-	return plugins.find((p) => p.id === id);
+	return get(plugins).find((p) => p.id === id);
 }
