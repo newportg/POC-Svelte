@@ -23,6 +23,8 @@ export interface TripConfig {
 	checkOut: string;
 	/** Optional link to a shared photo album for this trip. */
 	photoAlbumUrl?: string;
+	/** Optional GPX file paths (relative to /static, e.g. "/activities/selva-2026/day1.gpx"). */
+	gpxFiles?: string[];
 }
 
 /** Default trips used until the user configures their own in Settings. */
@@ -48,6 +50,14 @@ export const DEFAULT_TRIPS: TripConfig[] = [
 		hotelLocation: 'Selva Val Gardena',
 		checkIn: '2026-01-03',
 		checkOut: '2026-01-10',
-		photoAlbumUrl: 'https://photos.app.goo.gl/vWiCtA2PqneABLuZ8'
+		photoAlbumUrl: 'https://photos.app.goo.gl/vWiCtA2PqneABLuZ8',
+		gpxFiles: [
+			'/activities/selva-2026/20260104.gpx',
+			'/activities/selva-2026/20260105.gpx',
+			'/activities/selva-2026/20260106.gpx',
+			'/activities/selva-2026/20260107.gpx',
+			'/activities/selva-2026/20260108.gpx',
+			'/activities/selva-2026/20260109.gpx'
+		]
 	}
 ];

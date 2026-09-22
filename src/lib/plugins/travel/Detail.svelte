@@ -4,6 +4,7 @@
 	import 'leaflet/dist/leaflet.css';
 	import { trips } from '$lib/trip';
 	import { fetchTripWeather, type TripWeather } from './weather';
+	import GpxActivity from './GpxActivity.svelte';
 
 	let { tripId }: { tripId: string } = $props();
 	let trip = $derived($trips.find((t) => t.id === tripId));
@@ -146,6 +147,17 @@
 				</a>
 			</div>
 		{/if}
+
+		{#if trip.gpxFiles && trip.gpxFiles.length > 0}
+			<div class="section">
+				<h2>Strava activities</h2>
+				<div class="activities-list">
+					{#each trip.gpxFiles as file (file)}
+						<GpxActivity path={file} />
+					{/each}
+				</div>
+			</div>
+		{/if}
 	</section>
 {:else}
 	<p>Trip not found.</p>
@@ -192,6 +204,11 @@
 		color: #fff;
 		text-decoration: none;
 		font-weight: 600;
+	}
+	.activities-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
 	}
 	.snow-total {
 		font-weight: 600;

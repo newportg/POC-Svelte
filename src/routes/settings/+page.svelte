@@ -22,6 +22,7 @@
 	let checkIn = $state('');
 	let checkOut = $state('');
 	let photoAlbumUrl = $state('');
+	let gpxFilesText = $state('');
 	let tripSaved = $state(false);
 
 	function loadTripForm(t: TripConfig | undefined) {
@@ -34,6 +35,7 @@
 		checkIn = t?.checkIn ?? '';
 		checkOut = t?.checkOut ?? '';
 		photoAlbumUrl = t?.photoAlbumUrl ?? '';
+		gpxFilesText = (t?.gpxFiles ?? []).join('\n');
 	}
 	$effect(() => {
 		loadTripForm(selectedTrip);
@@ -53,6 +55,10 @@
 
 	function handleTripSave(e: SubmitEvent) {
 		e.preventDefault();
+		const gpxFiles = gpxFilesText
+			.split('\n')
+			.map((s) => s.trim())
+			.filter(Boolean);
 		upsertTrip({
 			id: selectedTripId,
 			destination,
@@ -63,7 +69,8 @@
 			hotelLocation,
 			checkIn,
 			checkOut,
-			photoAlbumUrl: photoAlbumUrl || undefined
+			photoAlbumUrl: photoAlbumUrl || undefined,
+			gpxFiles: gpxFiles.length > 0 ? gpxFiles : undefined
 		});
 		tripSaved = true;
 		setTimeout(() => (tripSaved = false), 2000);
@@ -137,6 +144,10 @@
 
 		<form onsubmit={handleTripSave}>
 			<label>
+				Trip ID <span class="hint-inline">(use this in GPX file paths)</span>
+				<input type="text" value={selectedTripId} readonly />
+			</label>
+			<label>
 				Destination
 				<input type="text" bind:value={destination} placeholder="e.g. Canazei" required />
 			</label>
@@ -175,6 +186,14 @@
 					bind:value={photoAlbumUrl}
 					placeholder="https://photos.app.goo.gl/..."
 				/>
+			</label>
+			<label>
+				GPX activity files (optional, one path per line)
+				<textarea
+					bind:value={gpxFilesText}
+					rows="3"
+					placeholder="/activities/selva-2026/day1.gpx"
+				></textarea>
 			</label>
 			<div class="trip-actions">
 				<button type="submit">Save trip</button>
@@ -222,10 +241,21 @@
 		gap: 0.35rem;
 		font-size: 0.9rem;
 	}
+	.hint-inline {
+		font-weight: normal;
+		font-size: 0.8rem;
+		color: var(--muted, #666);
+	}
+	input[readonly] {
+		color: var(--muted, #666);
+		background: color-mix(in srgb, var(--card-bg, #fff) 90%, var(--border, #ccc));
+	}
 	input,
-	select {
+	select,
+	textarea {
 		padding: 0.5rem;
 		font-size: 1rem;
+		font-family: inherit;
 		border: 1px solid var(--border, #ccc);
 		border-radius: 6px;
 		background: var(--card-bg, #fff);
