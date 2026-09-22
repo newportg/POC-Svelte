@@ -94,9 +94,9 @@
 	}
 </script>
 
-<div class="settings-page">
+<div class="settings-page rounded-lg border border-[var(--border)] bg-[var(--card-bg)] shadow-sm">
 	<a class="back-link" href={base || '/'}>← Back to dashboard</a>
-	<h1>Settings</h1>
+	<h1 class="page-title">Settings</h1>
 
 	<section>
 		<h2>Theme</h2>
@@ -234,7 +234,27 @@
 		flex-wrap: wrap;
 	}
 	section {
-		margin-bottom: 2rem;
+		margin-bottom: 1.5rem;
+		padding-bottom: 1.5rem;
+		border-bottom: 1px solid var(--border);
+	}
+	section:last-of-type {
+		margin-bottom: 0;
+		padding-bottom: 0;
+		border-bottom: 0;
+	}
+	.page-title {
+		margin: 0 0 1.5rem;
+		font-size: 1.5rem;
+		letter-spacing: -0.02em;
+	}
+	h2 {
+		margin: 0 0 0.75rem;
+		font-size: 0.9rem;
+		font-weight: 650;
+	}
+	.settings-page > .back-link {
+		padding-top: 0;
 	}
 	label {
 		display: flex;

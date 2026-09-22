@@ -7,7 +7,7 @@
 </script>
 
 <div class="flex min-h-full flex-col">
-	<a class="inline-flex items-center px-6 pt-4 text-sm font-medium no-underline hover:underline" href={base || '/'}>← Back to dashboard</a>
+	<a class="inline-flex items-center px-5 pt-3 text-xs font-medium no-underline hover:underline" href={base || '/'}>← Back to dashboard</a>
 
 	{#if plugin}
 		{@const Detail = plugin.detail}
