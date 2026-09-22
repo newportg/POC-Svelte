@@ -6,8 +6,8 @@
 	let plugin = $derived($plugins.find((p) => p.id === ($page.params.id ?? '')));
 </script>
 
-<div class="plugin-page">
-	<a class="back-link" href={base || '/'}>← Back to dashboard</a>
+<div class="flex min-h-full flex-col">
+	<a class="inline-flex items-center px-6 pt-4 text-sm font-medium no-underline hover:underline" href={base || '/'}>← Back to dashboard</a>
 
 	{#if plugin}
 		{@const Detail = plugin.detail}
@@ -16,20 +16,3 @@
 		<p>Plugin "{$page.params.id}" not found.</p>
 	{/if}
 </div>
-
-<style>
-	.plugin-page {
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-	}
-	.back-link {
-		display: inline-block;
-		padding: 0.75rem 1.5rem 0;
-		color: inherit;
-		text-decoration: none;
-	}
-	.back-link:hover {
-		text-decoration: underline;
-	}
-</style>

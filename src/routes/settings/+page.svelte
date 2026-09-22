@@ -4,6 +4,7 @@
 	import { trips, upsertTrip, removeTrip, newTripId } from '$lib/trip';
 	import type { TripConfig } from '$lib/config';
 	import { base } from '$app/paths';
+	import Button from '$lib/components/ui/Button.svelte';
 
 	let name = $state($location.name);
 	let lat = $state($location.lat);
@@ -124,7 +125,7 @@
 				Longitude
 				<input type="number" step="any" bind:value={lon} required />
 			</label>
-			<button type="submit">Save</button>
+			<Button type="submit">Save</Button>
 			{#if saved}
 				<span class="saved">Saved</span>
 			{/if}
@@ -196,9 +197,9 @@
 				></textarea>
 			</label>
 			<div class="trip-actions">
-				<button type="submit">Save trip</button>
-				<button type="button" onclick={handleAddTrip}>Add new trip</button>
-				<button type="button" onclick={handleRemoveTrip}>Remove trip</button>
+				<Button type="submit">Save trip</Button>
+				<Button type="button" variant="outline" onclick={handleAddTrip}>Add new trip</Button>
+				<Button type="button" variant="destructive" onclick={handleRemoveTrip}>Remove trip</Button>
 			</div>
 			{#if tripSaved}
 				<span class="saved">Saved</span>
@@ -260,10 +261,6 @@
 		border-radius: 6px;
 		background: var(--card-bg, #fff);
 		color: inherit;
-	}
-	button {
-		align-self: flex-start;
-		padding: 0.5rem 1.25rem;
 	}
 	.saved {
 		color: var(--success, #2e7d32);
