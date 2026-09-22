@@ -1,6 +1,7 @@
 {
 	"$schema": "https://shadcn-svelte.com/schema.json",
 	"style": "rhea",
+	"preset": "b27GcrRo",
 	"tailwind": {
 		"config": "",
 		"css": "src/app.css",
