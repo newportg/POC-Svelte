@@ -10,6 +10,20 @@ const base = (rawBase === '' || rawBase.startsWith('/') ? rawBase : `/${rawBase}
 	| `/${string}`;
 
 export default defineConfig({
+	server: {
+		proxy: {
+			'/api/noaa': {
+				target: 'https://aviationweather.gov',
+				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/api\/noaa/, '')
+			},
+			'/api/polymarket': {
+				target: 'https://gamma-api.polymarket.com',
+				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/api\/polymarket/, '')
+			}
+		}
+	},
 	plugins: [
 		tailwindcss(),
 		sveltekit({

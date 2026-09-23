@@ -4,6 +4,10 @@ import TemperatureWidget from './temperature/Widget.svelte';
 import TemperatureDetail from './temperature/Detail.svelte';
 import MapWidget from './map/Widget.svelte';
 import MapDetail from './map/Detail.svelte';
+import PolymarketWidget from './polymarket/Widget.svelte';
+import PolymarketDetail from './polymarket/Detail.svelte';
+import TemperatureMarketWidget from './temperatureMarket/Widget.svelte';
+import TemperatureMarketDetail from './temperatureMarket/Detail.svelte';
 import TravelWidget from './travel/Widget.svelte';
 import TravelDetail from './travel/Detail.svelte';
 import { trips } from '$lib/trip';
@@ -23,6 +27,20 @@ const staticPlugins: DashboardPlugin[] = [
 		icon: '🗺️',
 		widget: MapWidget,
 		detail: MapDetail
+	},
+	{
+		id: 'polymarket',
+		name: 'Polymarket Categories',
+		icon: '🎲',
+		widget: PolymarketWidget,
+		detail: PolymarketDetail
+	},
+	{
+		id: 'london-temperature-market',
+		name: 'London Temperature Market',
+		icon: '🌡️',
+		widget: TemperatureMarketWidget,
+		detail: TemperatureMarketDetail
 	}
 ];
 
