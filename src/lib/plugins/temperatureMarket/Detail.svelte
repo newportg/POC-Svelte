@@ -6,6 +6,7 @@
 		fetchPublishedTemperatureResult,
 		getPrediction,
 		getPredictions,
+		hydratePredictions,
 		londonDateParts,
 		predictionMatchesResult,
 		savePrediction,
@@ -35,6 +36,7 @@
 	}
 
 	onMount(async () => {
+		await hydratePredictions();
 		refreshState();
 		try {
 			forecast = await fetchLondonForecast(marketDate);

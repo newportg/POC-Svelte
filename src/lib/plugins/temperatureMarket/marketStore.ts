@@ -1,4 +1,5 @@
 import { browser } from '$app/environment';
+import { base } from '$app/paths';
 
 export interface TemperaturePrediction {
 	marketDate: string;
@@ -20,6 +21,24 @@ function loadPredictions(): TemperaturePrediction[] {
 		return raw ? (JSON.parse(raw) as TemperaturePrediction[]) : [];
 	} catch {
 		return [];
+	}
+}
+
+export async function hydratePredictions() {
+	if (!browser) return;
+	try {
+		const response = await fetch(`${base}/data/london-temperature-predictions.json`, {
+			cache: 'no-store'
+		});
+		if (!response.ok) return;
+		const data = (await response.json()) as { predictions?: Record<string, TemperaturePrediction> };
+		const merged = new Map(loadPredictions().map((prediction) => [prediction.marketDate, prediction]));
+		for (const prediction of Object.values(data.predictions ?? {})) {
+			merged.set(prediction.marketDate, prediction);
+		}
+		localStorage.setItem(STORAGE_KEY, JSON.stringify([...merged.values()]));
+	} catch {
+		// Local predictions remain available if the deployed data file is unavailable.
 	}
 }
 
