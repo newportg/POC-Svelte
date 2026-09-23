@@ -7,6 +7,12 @@ on:
     - cron: '55 14 * * *'
     - cron: '55 15 * * *'
   workflow_dispatch:
+    inputs:
+      force:
+        description: Run immediately, regardless of the London time window
+        required: false
+        default: true
+        type: boolean
 
 permissions:
   contents: write
@@ -20,15 +26,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: '24.x'
+          check-latest: true
+
+      - name: Show runtime
+        run: node --version
 
       - name: Save London prediction
         run: node scripts/london-temperature-market.mjs
         env:
-          LONDON_MARKET_FORCE: ${{ github.event_name == 'workflow_dispatch' && 'true' || 'false' }}
+          LONDON_MARKET_FORCE: ${{ github.event_name == 'workflow_dispatch' && inputs.force || 'false' }}
 
       - name: Commit prediction
         run: |
