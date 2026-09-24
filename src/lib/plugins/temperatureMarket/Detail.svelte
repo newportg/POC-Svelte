@@ -6,6 +6,7 @@
 		fetchPublishedTemperatureResult,
 		getPrediction,
 		getPredictions,
+		getResolutionUrl,
 		hydratePredictions,
 		londonDateParts,
 		predictionMatchesResult,
@@ -80,7 +81,11 @@
 		<h2>Market rules</h2>
 		<ul>
 			<li>Target: London's daily maximum temperature.</li>
-			<li>Source: NOAA observations from London City Airport station EGLC.</li>
+			<li>
+				Source: <a href={getResolutionUrl(marketDate)} target="_blank" rel="noopener noreferrer">
+					NOAA observations from London City Airport station EGLC
+				</a>.
+			</li>
 			<li>Unit: whole degrees Celsius, matching the market resolution.</li>
 			<li>Close: 16:00 Europe/London each day.</li>
 			<li>Predictions are saved locally and cannot be changed after close.</li>
@@ -95,7 +100,7 @@
 			{:else if error}
 				<p class="status error">{error}</p>
 			{:else}
-				<p class="forecast">NOAA EGLC estimate: {forecast?.toFixed(1)}°C</p>
+				<p class="forecast">London temperature estimate: {forecast?.toFixed(1)}°C</p>
 			{/if}
 		</div>
 

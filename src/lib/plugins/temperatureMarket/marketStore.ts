@@ -76,23 +76,30 @@ export function addDays(dateString: string, days: number): string {
 	return date.toISOString().slice(0, 10);
 }
 
+export function getResolutionUrl(marketDate: string): string {
+	void marketDate;
+	return 'https://www.weather.gov/wrh/timeseries?site=eglc';
+}
+
 export async function fetchLondonForecast(marketDate: string): Promise<number> {
-	const date = `${marketDate}T23:59:59Z`;
-	const response = await fetch(
-		`/api/noaa/api/data/metar?ids=EGLC&format=json&date=${encodeURIComponent(date)}&hours=24`
-	);
-	if (!response.ok) throw new Error('London forecast unavailable');
-	const observations = (await response.json()) as { obsTime?: number; temp?: number }[];
-	const temperatures = observations
-		.filter(
-			(observation) =>
-				observation.obsTime !== undefined &&
-				londonDateParts(new Date(observation.obsTime * 1000)).date === marketDate
-		)
-		.map((observation) => observation.temp)
-		.filter((temperature): temperature is number => typeof temperature === 'number');
-	if (temperatures.length === 0) throw new Error('No NOAA observations available for this market date');
-	return Math.max(...temperatures);
+	try {
+		const response = await fetch('/api/noaa/api/data/metar?ids=EGLC&format=json&hours=24');
+		if (!response.ok) throw new Error('NOAA request failed');
+		const observations = (await response.json()) as { obsTime?: number; temp?: number }[];
+		const temperatures = observations
+			.filter(
+				(observation) =>
+					observation.obsTime !== undefined &&
+					londonDateParts(new Date(observation.obsTime * 1000)).date === marketDate
+			)
+			.map((observation) => observation.temp)
+			.filter((temperature): temperature is number => typeof temperature === 'number');
+		if (temperatures.length > 0) return Math.max(...temperatures);
+	} catch {
+		// The resolution source is authoritative, but its endpoint is occasionally unavailable.
+	}
+
+	throw new Error('London forecast unavailable');
 }
 
 export async function fetchPublishedTemperatureResult(
@@ -103,7 +110,7 @@ export async function fetchPublishedTemperatureResult(
 	const day = date.getUTCDate();
 	const year = date.getUTCFullYear();
 	const slug = `highest-temperature-in-london-on-${month}-${day}-${year}`;
-	const response = await fetch(`/api/polymarket/events?slug=${slug}`);
+	const response = await fetch(`https://gamma-api.polymarket.com/events?slug=${slug}`);
 	if (!response.ok) throw new Error('Polymarket result unavailable');
 	const events = (await response.json()) as {
 		markets?: { closed?: boolean; groupItemTitle?: string; outcomePrices?: string }[];
