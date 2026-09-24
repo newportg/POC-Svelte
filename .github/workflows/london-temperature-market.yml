@@ -53,3 +53,11 @@ jobs:
           git add static/data/london-temperature-predictions.json
           git commit -m "Save London temperature market prediction"
           git push
+
+  deploy:
+    needs: save-prediction
+    uses: ./.github/workflows/deploy.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
