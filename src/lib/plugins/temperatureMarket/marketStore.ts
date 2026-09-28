@@ -81,18 +81,20 @@ export function getResolutionUrl(marketDate: string): string {
 	return 'https://www.weather.gov/wrh/timeseries?site=eglc';
 }
 
+// NOAA's aviationweather.gov API has no Access-Control-Allow-Origin header, so it can only be
+// reached via the dev-server proxy in vite.config.ts. Open-Meteo supports CORS directly, so it
+// works both locally and on the statically hosted GitHub Pages build.
 export async function fetchLondonForecast(marketDate: string): Promise<number> {
 	try {
-		const response = await fetch('/api/noaa/api/data/metar?ids=EGLC&format=json&hours=24');
-		if (!response.ok) throw new Error('NOAA request failed');
-		const observations = (await response.json()) as { obsTime?: number; temp?: number }[];
-		const temperatures = observations
-			.filter(
-				(observation) =>
-					observation.obsTime !== undefined &&
-					londonDateParts(new Date(observation.obsTime * 1000)).date === marketDate
-			)
-			.map((observation) => observation.temp)
+		const response = await fetch(
+			'https://api.open-meteo.com/v1/forecast?latitude=51.505&longitude=0.055&hourly=temperature_2m&timezone=Europe%2FLondon&forecast_days=2&past_days=1'
+		);
+		if (!response.ok) throw new Error('Open-Meteo request failed');
+		const data = (await response.json()) as { hourly?: { time?: string[]; temperature_2m?: number[] } };
+		const times = data.hourly?.time ?? [];
+		const temps = data.hourly?.temperature_2m ?? [];
+		const temperatures = times
+			.map((time, index) => (time.startsWith(marketDate) ? temps[index] : undefined))
 			.filter((temperature): temperature is number => typeof temperature === 'number');
 		if (temperatures.length > 0) return Math.max(...temperatures);
 	} catch {
