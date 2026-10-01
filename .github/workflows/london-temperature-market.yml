@@ -2,10 +2,12 @@ name: London Temperature Market
 
 on:
   schedule:
-    # GitHub cron is UTC. These cover 15:55 Europe/London in both DST modes;
-    # the script skips the schedule that is not currently 15:55 in London.
-    - cron: '55 14 * * *'
-    - cron: '55 15 * * *'
+    # Native IANA timezone scheduling handles BST/GMT automatically, so a single
+    # cron entry is enough (avoids the old dual-UTC-cron workaround, which could
+    # silently no-op if GitHub delayed the run past the script's narrow window).
+    # :47 avoids the congested top-of-hour/:55 minutes that are more prone to delay.
+    - cron: '47 15 * * *'
+      timezone: 'Europe/London'
   workflow_dispatch:
     inputs:
       force:

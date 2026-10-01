@@ -24,8 +24,9 @@ function londonParts(date = new Date()) {
 
 function shouldRun() {
 	if (forceRun) return true;
+	// Widened window tolerates GitHub Actions schedule delays (runs can be late).
 	const now = londonParts();
-	return now.hour === 15 && now.minute >= 50;
+	return (now.hour === 15 && now.minute >= 45) || (now.hour === 16 && now.minute <= 30);
 }
 
 async function loadSaved() {
