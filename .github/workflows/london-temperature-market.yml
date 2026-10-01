@@ -6,7 +6,7 @@ on:
     # cron entry is enough (avoids the old dual-UTC-cron workaround, which could
     # silently no-op if GitHub delayed the run past the script's narrow window).
     # :47 avoids the congested top-of-hour/:55 minutes that are more prone to delay.
-    - cron: '47 15 * * *'
+    - cron: '45 14 * * *'
       timezone: 'Europe/London'
   workflow_dispatch:
     inputs:
