@@ -41,6 +41,13 @@
       "savedAt": "2026-09-28T11:15:10.832Z",
       "source": "https://aviationweather.gov/api/data/metar?ids=EGLC&format=json&hours=24",
       "observationCount": 24
+    },
+    "2026-10-01": {
+      "predictionC": 22,
+      "marketDate": "2026-10-01",
+      "savedAt": "2026-10-01T13:58:55.939Z",
+      "source": "https://aviationweather.gov/api/data/metar?ids=EGLC&format=json&hours=24",
+      "observationCount": 30
     }
   }
 }
